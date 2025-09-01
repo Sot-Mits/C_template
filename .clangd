@@ -1,0 +1,6 @@
+CompileFlags:
+  Add:
+    - "-I/home/sot/Desktop/VecTerm/inc"
+    - "-Wall" 
+    - "-Wextra" 
+    - "-Wpedantic"
