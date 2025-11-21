@@ -1,5 +1,5 @@
 #Project Configuration
-TARGET        = c_template
+TARGET        = c_project
 CC            = clang
 SRC_DIR       = ./src
 INC_DIR       = ./inc
@@ -46,6 +46,9 @@ $(BIN_DIR)/$(TARGET)-$(BUILD): $(OBJS)
 		mv "$(BIN_DIR)/$(TARGET)-release" "$(BIN_DIR)/$(TARGET)"; \
 	fi
 
+init:
+	mkdir $(SRC_DIR) $(INC_DIR)
+
 #Clean build artifacts
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
@@ -53,6 +56,7 @@ clean:
 #Help message
 help:
 	@echo "Available targets:"
+	@echo "  init     : Initialises Source and Include directories"
 	@echo "  release  : Build release version"
 	@echo "  native   : Build with native CPU optimizations"
 	@echo "  debug    : Build debug version"
@@ -62,4 +66,4 @@ help:
 	@echo "Binaries output to: $(BIN_DIR)"
 	@echo "Objects output to: $(OBJ_DIR)"
 
-.PHONY: release native debug clean help
+.PHONY: init release native debug clean help
