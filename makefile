@@ -1,11 +1,11 @@
 #Project Configuration
-TARGET        = c_project
+TARGET        = c_template
 CC            = clang
 SRC_DIR       = ./src
 INC_DIR       = ./inc
 OBJ_DIR       = ./obj
 BIN_DIR       = ./bin
-BUILD         := $(if $(MAKECMDGOALS),$(firstword $(MAKECMDGOALS)),generic)
+BUILD         := $(if $(MAKECMDGOALS),$(firstword $(MAKECMDGOALS)),debug)
 
 #File Discovery
 SRCS          = $(wildcard $(SRC_DIR)/*.c)
@@ -14,15 +14,13 @@ DEPS          = $(wildcard $(INC_DIR)/*.h)
 
 #Compiler Flags
 COMMON_FLAGS  = -I$(INC_DIR) -Wall -Wextra -Wpedantic -fdiagnostics-color=always
-GENERIC_FLAGS = -O3 -flto
+RELEASE_FLAGS = -O3 -flto
 NATIVE_FLAGS  = -O3 -flto -march=native
 DEBUG_FLAGS   = -Og -ggdb3
 
-all: generic
-
-#Generic build
-generic: CFLAGS = $(COMMON_FLAGS) $(GENERIC_FLAGS)
-generic: setup $(BIN_DIR)/$(TARGET)-$(BUILD)
+#Release build
+release: CFLAGS = $(COMMON_FLAGS) $(RELEASE_FLAGS)
+release: setup $(BIN_DIR)/$(TARGET)-$(BUILD)
 
 #Native build
 native: CFLAGS = $(COMMON_FLAGS) $(NATIVE_FLAGS)
@@ -43,7 +41,10 @@ $(OBJ_DIR)/$(BUILD)/%.o: $(SRC_DIR)/%.c $(DEPS)
 #Main targets
 $(BIN_DIR)/$(TARGET)-$(BUILD): $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@
-	-mv $(BIN_DIR)/$(TARGET)-generic $(BIN_DIR)/$(TARGET)
+
+	@if [ -f "$(BIN_DIR)/$(TARGET)-release" ]; then \
+		mv "$(BIN_DIR)/$(TARGET)-release" "$(BIN_DIR)/$(TARGET)"; \
+	fi
 
 #Clean build artifacts
 clean:
@@ -52,13 +53,13 @@ clean:
 #Help message
 help:
 	@echo "Available targets:"
-	@echo "  generic  : Build generic version"
+	@echo "  release  : Build release version"
 	@echo "  native   : Build with native CPU optimizations"
-	@echo "  debug    : Build debug version with sanitizers"
+	@echo "  debug    : Build debug version"
 	@echo "  clean    : Remove all build artifacts"
 	@echo "  help     : Show this help message"
 	@echo ""
 	@echo "Binaries output to: $(BIN_DIR)"
 	@echo "Objects output to: $(OBJ_DIR)"
 
-.PHONY: generic native debug clean help
+.PHONY: release native debug clean help
