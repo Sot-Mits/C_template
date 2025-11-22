@@ -1,6 +1,6 @@
 #Project Configuration
 TARGET        = c_project
-CC            = clang
+CC            = cc
 SRC_DIR       = ./src
 INC_DIR       = ./inc
 OBJ_DIR       = ./obj
