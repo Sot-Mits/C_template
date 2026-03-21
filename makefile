@@ -20,7 +20,7 @@ DEBUG_OBJS    = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/debug/%.o,$(SRCS))
 
 #Compiler Flags
 COMMON_FLAGS  = -I$(INC_DIR) -Wall -Wextra -Wpedantic -fdiagnostics-color=always
-RELEASE_FLAGS = -O3 -flto
+RELEASE_FLAGS = -O3 -flto -march=generic -static
 NATIVE_FLAGS  = -O3 -flto -march=native
 DEBUG_FLAGS   = -Og -ggdb3
 
